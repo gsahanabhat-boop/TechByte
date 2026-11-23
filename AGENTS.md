@@ -28,3 +28,11 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- Trip agents run server-side in `src/lib/trip/agents.server.ts` via the Lovable AI gateway; the client-side orchestrator (`src/lib/trip/orchestrator.ts`) calls one `runAgent` server function per agent so the UI can show live progress.
+- Every agent must degrade to `src/lib/trip/fallback.ts` on any AI failure so a plan is always produced.
+- Agent outputs are parsed with the zod schemas in `src/lib/trip/types.ts` (lenient `.catch` defaults) — change the schema and prompt shape together.
+- Saved trips live in browser localStorage (`src/lib/trip/history.ts`); there is no account system.
+- `backend/` is an optional standalone FastAPI mirror of the agents for local Python use; the web app does not depend on it.
