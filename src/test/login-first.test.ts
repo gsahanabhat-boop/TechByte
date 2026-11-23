@@ -16,3 +16,12 @@ describe("login-first entry", () => {
     expect(shouldShowLoginFirst({ loading: true, signedIn: false, guest: false })).toBe(false);
   });
 });
+
+describe("guest choice", () => {
+  it("lasts for the current visit only", async () => {
+    const mod = await import("@/lib/guest");
+    expect(mod.isGuest()).toBe(false);
+    mod.setGuest(true);
+    expect(mod.isGuest()).toBe(true);
+  });
+});

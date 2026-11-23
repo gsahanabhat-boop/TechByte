@@ -1,21 +1,15 @@
-/** Visitors who chose "Continue as guest" skip the login-first screen on this browser. */
-export const GUEST_KEY = "tripsync:guest";
+/**
+ * "Continue as guest" lasts only for the current visit: it is kept in memory,
+ * so every fresh load of the site shows the login screen again to signed-out visitors.
+ */
+let guestThisVisit = false;
 
 export function isGuest(): boolean {
-  try {
-    return localStorage.getItem(GUEST_KEY) === "1";
-  } catch {
-    return false;
-  }
+  return guestThisVisit;
 }
 
 export function setGuest(on: boolean) {
-  try {
-    if (on) localStorage.setItem(GUEST_KEY, "1");
-    else localStorage.removeItem(GUEST_KEY);
-  } catch {
-    /* storage unavailable: the login screen simply shows again */
-  }
+  guestThisVisit = on;
 }
 
 /** The home page sends a visitor to the login screen only once we know they are signed out and not a guest. */

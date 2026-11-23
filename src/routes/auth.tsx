@@ -201,22 +201,22 @@ function AuthPage() {
           </span>
         </Link>
 
-        <div className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+        <div className="grid flex-1 items-center gap-6 py-6 lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:py-10">
           {/* Story */}
           <div className="max-w-xl animate-fade-up">
             <p className="font-mono text-xs uppercase tracking-[0.25em] text-marigold">
               Field journal · Karnataka
             </p>
-            <h2 className="mt-3 text-5xl font-semibold leading-[1.02] sm:text-6xl">
+            <h2 className="mt-2 text-4xl font-semibold leading-[1.02] lg:mt-3 lg:text-6xl">
               Every road,
               <br />
               <span className="italic text-marigold">planned for you.</span>
             </h2>
-            <p className="mt-5 max-w-md text-base text-ink-foreground/85 sm:text-lg">
+            <p className="mt-5 hidden max-w-md text-lg text-ink-foreground/85 lg:block">
               Four AI agents research, budget, route and personalise your trip — then Yatri
               answers every question along the way.
             </p>
-            <div className="mt-6 hidden flex-wrap gap-2 sm:flex">
+            <div className="mt-6 hidden flex-wrap gap-2 lg:flex">
               {AGENT_CHIPS.map(([label, dot]) => (
                 <span
                   key={label}
@@ -242,8 +242,8 @@ function AuthPage() {
             style={{ animationDelay: "120ms" }}
           >
             <div className="rounded-3xl border border-ink-foreground/20 bg-card/90 p-7 text-card-foreground shadow-[var(--shadow-lift)] backdrop-blur-xl sm:p-8">
-              <img src={yatri} alt="" width={56} height={56} className="size-14" />
-              <h1 className="mt-4 text-3xl font-semibold leading-tight">
+              <img src={yatri} alt="" width={56} height={56} className="hidden size-14 lg:block" />
+              <h1 className="text-3xl font-semibold leading-tight lg:mt-4">
                 {mode === "signin" ? "Welcome, traveller" : "Create your account"}
               </h1>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -273,7 +273,7 @@ function AuthPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="google-signin mt-6 h-11 w-full gap-2.5 font-medium"
+                    className="google-signin mt-5 h-11 w-full gap-2.5 font-medium"
                     disabled={googleBusy}
                     onClick={() => void signInWithGoogle()}
                   >
