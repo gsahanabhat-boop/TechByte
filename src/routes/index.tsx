@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowDown, Cpu, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
@@ -10,6 +10,8 @@ import { SiteFooter, SiteHeader } from "@/components/trip/SiteHeader";
 import { TripForm } from "@/components/trip/TripForm";
 import { TripResults } from "@/components/trip/TripResults";
 import { AGENTS, useTripOrchestrator } from "@/lib/trip/orchestrator";
+import { useAuth } from "@/lib/auth";
+import { isGuest, shouldShowLoginFirst } from "@/lib/guest";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,6 +39,14 @@ function Index() {
   const orc = useTripOrchestrator();
   const resultsRef = useRef<HTMLDivElement>(null);
   const workflowRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
+
+  // Login-first entry: signed-out visitors who haven't chosen "Continue as guest" see the login screen.
+  useEffect(() => {
+    if (shouldShowLoginFirst({ loading, signedIn: !!user, guest: isGuest() }))
+      void navigate({ to: "/auth", search: { redirect: "/" }, replace: true });
+  }, [loading, user, navigate]);
 
   useEffect(() => {
     if (orc.plan) resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });

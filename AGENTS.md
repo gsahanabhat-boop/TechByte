@@ -38,3 +38,4 @@ use the editor.
 - The Yatri chatbot keeps one conversation per signed-in user in `chat_messages`; `/api/chat` verifies the bearer token, saves both turns, and streams via the AI gateway. UI lives in `src/components/chat/ChatPanel.tsx`, shared by `/chat` and the floating `ChatWidget` mounted in `__root`.
 - Auth state comes from the single `AuthProvider` listener in `src/lib/auth.tsx`; protected pages go under `src/routes/_authenticated/`.
 - `backend/` is an optional standalone FastAPI mirror of the agents for local Python use; the web app does not depend on it.
+- Login-first entry: `/` sends signed-out visitors to `/auth` unless they chose "Continue as guest" (localStorage flag in `src/lib/guest.ts`); the planner stays usable without an account.
