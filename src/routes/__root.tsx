@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/lib/auth";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -82,10 +83,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "TripSync AI — Autonomous Travel Planning Agents" },
-      { name: "description", content: "Four AI agents research, budget, route and personalise your trip in under a minute." },
+      {
+        name: "description",
+        content:
+          "Four AI agents research, budget, route and personalise your trip in under a minute.",
+      },
       { name: "author", content: "TripSync AI" },
       { property: "og:title", content: "TripSync AI — Autonomous Travel Planning Agents" },
-      { property: "og:description", content: "Four AI agents research, budget, route and personalise your trip in under a minute." },
+      {
+        property: "og:description",
+        content:
+          "Four AI agents research, budget, route and personalise your trip in under a minute.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -95,7 +104,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -130,7 +139,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        <Outlet />
+      </AuthProvider>
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );

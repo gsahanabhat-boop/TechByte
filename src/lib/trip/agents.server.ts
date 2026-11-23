@@ -57,15 +57,23 @@ export interface AgentContext {
 function contextText(agent: AgentId, ctx: AgentContext): string {
   const parts: string[] = [];
   if (agent !== "research" && ctx.research)
-    parts.push(`Research findings: ${JSON.stringify({ highlights: ctx.research.highlights, foodSpots: ctx.research.foodSpots })}`);
+    parts.push(
+      `Research findings: ${JSON.stringify({ highlights: ctx.research.highlights, foodSpots: ctx.research.foodSpots })}`,
+    );
   if ((agent === "route" || agent === "decision") && ctx.budget)
     parts.push(`Budget plan: ${JSON.stringify(ctx.budget)}`);
   if (agent === "decision" && ctx.route)
-    parts.push(`Itinerary: ${JSON.stringify(ctx.route.days.map((d) => ({ day: d.day, items: d.items.map((i) => i.title) })))}`);
+    parts.push(
+      `Itinerary: ${JSON.stringify(ctx.route.days.map((d) => ({ day: d.day, items: d.items.map((i) => i.title) })))}`,
+    );
   return parts.join("\n\n");
 }
 
-function fallbackFor<K extends AgentId>(agent: K, t: TripInput, ctx: AgentContext): AgentOutputMap[K] {
+function fallbackFor<K extends AgentId>(
+  agent: K,
+  t: TripInput,
+  ctx: AgentContext,
+): AgentOutputMap[K] {
   const research = ctx.research ?? fallbackResearch(t);
   const budget = ctx.budget ?? fallbackBudget(t);
   const map: AgentOutputMap = {
@@ -126,10 +134,18 @@ export async function runAgentOnce<K extends AgentId>(
         b.withinBudget = b.estimatedTotal <= trip.budget;
         if (!b.breakdown.length) throw new Error("Budget agent returned no breakdown");
       }
-      if (agent === "route" && !(data as RouteResult).days.length) throw new Error("Route agent returned no days");
+      if (agent === "route" && !(data as RouteResult).days.length)
+        throw new Error("Route agent returned no days");
       if (agent === "research" && !(data as ResearchResult).highlights.length)
         throw new Error("Research agent returned no highlights");
-      return { agent, data, source: "gemini", model: MODEL, durationMs: Date.now() - started, notes };
+      return {
+        agent,
+        data,
+        source: "gemini",
+        model: MODEL,
+        durationMs: Date.now() - started,
+        notes,
+      };
     } catch (err) {
       const msg =
         err instanceof GatewayError

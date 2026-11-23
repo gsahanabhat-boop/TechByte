@@ -1,10 +1,4 @@
-import type {
-  BudgetResult,
-  DecisionResult,
-  ResearchResult,
-  RouteResult,
-  TripInput,
-} from "./types";
+import type { BudgetResult, DecisionResult, ResearchResult, RouteResult, TripInput } from "./types";
 
 /** Curated offline knowledge so the demo works without any AI call. */
 const MYSURU: ResearchResult = {
@@ -13,13 +7,69 @@ const MYSURU: ResearchResult = {
   bestTimeToVisit: "October to February (Dasara festival in Sep–Oct lights up the palace)",
   weatherNote: "Pleasant 18–30°C most of the year; carry light layers and an umbrella in monsoon.",
   highlights: [
-    { name: "Mysore Palace", category: "Culture", description: "Indo-Saracenic royal palace; Sunday evening illumination with ~97,000 bulbs.", entryFee: 120, timeNeeded: "2 hrs", rating: 4.8, interestMatch: "Culture" },
-    { name: "Chamundi Hills", category: "Nature", description: "Hilltop temple with city views; climb the 1,000 steps past the giant Nandi.", entryFee: 0, timeNeeded: "2–3 hrs", rating: 4.6, interestMatch: "Nature" },
-    { name: "Devaraja Market", category: "Food", description: "Century-old market of flowers, kumkum, spices and Mysore pak.", entryFee: 0, timeNeeded: "1 hr", rating: 4.4, interestMatch: "Food" },
-    { name: "Karanji Lake", category: "Nature", description: "Lakeside walk with a butterfly park and walk-through aviary.", entryFee: 50, timeNeeded: "1.5 hrs", rating: 4.3, interestMatch: "Nature" },
-    { name: "Jaganmohan Palace Art Gallery", category: "Culture", description: "Raja Ravi Varma paintings and royal artefacts in a quiet palace.", entryFee: 120, timeNeeded: "1 hr", rating: 4.2, interestMatch: "Culture" },
-    { name: "St. Philomena's Church", category: "Culture", description: "Neo-Gothic twin spires, one of the tallest churches in India.", entryFee: 0, timeNeeded: "45 min", rating: 4.5, interestMatch: "Culture" },
-    { name: "Brindavan Gardens (KRS Dam)", category: "Nature", description: "Terraced gardens with an evening musical fountain show.", entryFee: 100, timeNeeded: "2–3 hrs", rating: 4.2, interestMatch: "Nature" },
+    {
+      name: "Mysore Palace",
+      category: "Culture",
+      description: "Indo-Saracenic royal palace; Sunday evening illumination with ~97,000 bulbs.",
+      entryFee: 120,
+      timeNeeded: "2 hrs",
+      rating: 4.8,
+      interestMatch: "Culture",
+    },
+    {
+      name: "Chamundi Hills",
+      category: "Nature",
+      description: "Hilltop temple with city views; climb the 1,000 steps past the giant Nandi.",
+      entryFee: 0,
+      timeNeeded: "2–3 hrs",
+      rating: 4.6,
+      interestMatch: "Nature",
+    },
+    {
+      name: "Devaraja Market",
+      category: "Food",
+      description: "Century-old market of flowers, kumkum, spices and Mysore pak.",
+      entryFee: 0,
+      timeNeeded: "1 hr",
+      rating: 4.4,
+      interestMatch: "Food",
+    },
+    {
+      name: "Karanji Lake",
+      category: "Nature",
+      description: "Lakeside walk with a butterfly park and walk-through aviary.",
+      entryFee: 50,
+      timeNeeded: "1.5 hrs",
+      rating: 4.3,
+      interestMatch: "Nature",
+    },
+    {
+      name: "Jaganmohan Palace Art Gallery",
+      category: "Culture",
+      description: "Raja Ravi Varma paintings and royal artefacts in a quiet palace.",
+      entryFee: 120,
+      timeNeeded: "1 hr",
+      rating: 4.2,
+      interestMatch: "Culture",
+    },
+    {
+      name: "St. Philomena's Church",
+      category: "Culture",
+      description: "Neo-Gothic twin spires, one of the tallest churches in India.",
+      entryFee: 0,
+      timeNeeded: "45 min",
+      rating: 4.5,
+      interestMatch: "Culture",
+    },
+    {
+      name: "Brindavan Gardens (KRS Dam)",
+      category: "Nature",
+      description: "Terraced gardens with an evening musical fountain show.",
+      entryFee: 100,
+      timeNeeded: "2–3 hrs",
+      rating: 4.2,
+      interestMatch: "Nature",
+    },
   ],
   foodSpots: [
     { name: "Mylari Hotel", specialty: "Butter-soft Mylari dosa", priceRange: "₹80–150" },
@@ -63,7 +113,11 @@ function genericResearch(t: TripInput): ResearchResult {
       { name: `${d} local thali house`, specialty: "Regional thali", priceRange: "₹150–300" },
       { name: `${d} street food lane`, specialty: "Local snacks", priceRange: "₹50–150" },
     ],
-    localTips: ["Use public transport where possible.", "Carry cash for small vendors.", "Start early to beat crowds."],
+    localTips: [
+      "Use public transport where possible.",
+      "Carry cash for small vendors.",
+      "Start early to beat crowds.",
+    ],
   };
 }
 
@@ -124,7 +178,16 @@ export function fallbackRoute(t: TripInput, research: ResearchResult): RouteResu
     const meal = food[i % Math.max(food.length, 1)];
     const items = [
       ...(i === 0
-        ? [{ time: "06:30", title: `Depart ${t.origin}`, description: `Head to ${t.destination} early to maximise the day.`, location: t.origin, cost: 0, durationMins: 180 }]
+        ? [
+            {
+              time: "06:30",
+              title: `Depart ${t.origin}`,
+              description: `Head to ${t.destination} early to maximise the day.`,
+              location: t.origin,
+              cost: 0,
+              durationMins: 180,
+            },
+          ]
         : []),
       ...pool.map((s, j) => ({
         time: SLOTS[(j + (i === 0 ? 1 : 0)) % SLOTS.length] ?? "10:00",
@@ -135,13 +198,39 @@ export function fallbackRoute(t: TripInput, research: ResearchResult): RouteResu
         durationMins: 90,
       })),
       ...(meal
-        ? [{ time: "13:00", title: `Lunch at ${meal.name}`, description: meal.specialty, location: meal.name, cost: 250 * t.travelers, durationMins: 60 }]
+        ? [
+            {
+              time: "13:00",
+              title: `Lunch at ${meal.name}`,
+              description: meal.specialty,
+              location: meal.name,
+              cost: 250 * t.travelers,
+              durationMins: 60,
+            },
+          ]
         : []),
       ...(i === t.days - 1
-        ? [{ time: "18:30", title: `Return to ${t.origin}`, description: "Evening departure home.", location: t.destination, cost: 0, durationMins: 180 }]
+        ? [
+            {
+              time: "18:30",
+              title: `Return to ${t.origin}`,
+              description: "Evening departure home.",
+              location: t.destination,
+              cost: 0,
+              durationMins: 180,
+            },
+          ]
         : []),
     ].sort((a, b) => a.time.localeCompare(b.time));
-    return { day: i + 1, theme: pool.map((p) => p.category).filter((v, k, a) => a.indexOf(v) === k).join(" & ") || "Explore", items };
+    return {
+      day: i + 1,
+      theme:
+        pool
+          .map((p) => p.category)
+          .filter((v, k, a) => a.indexOf(v) === k)
+          .join(" & ") || "Explore",
+      items,
+    };
   });
   const isMysuru = /mys(o|u)r/i.test(t.destination) && /bengal|bangal/i.test(t.origin);
   return {
@@ -153,14 +242,22 @@ export function fallbackRoute(t: TripInput, research: ResearchResult): RouteResu
   };
 }
 
-export function fallbackDecision(t: TripInput, budget: BudgetResult, research: ResearchResult): DecisionResult {
+export function fallbackDecision(
+  t: TripInput,
+  budget: BudgetResult,
+  research: ResearchResult,
+): DecisionResult {
   const within = budget.estimatedTotal <= t.budget;
   const matchReasons = t.interests.map((interest) => {
-    const hits = research.highlights.filter((h) => h.interestMatch.toLowerCase() === interest.toLowerCase()).length;
+    const hits = research.highlights.filter(
+      (h) => h.interestMatch.toLowerCase() === interest.toLowerCase(),
+    ).length;
     return {
       interest,
       score: Math.min(100, 55 + hits * 15),
-      reason: hits ? `${hits} highlight${hits > 1 ? "s" : ""} match your love of ${interest.toLowerCase()}.` : `Limited dedicated ${interest.toLowerCase()} spots — mixed in where possible.`,
+      reason: hits
+        ? `${hits} highlight${hits > 1 ? "s" : ""} match your love of ${interest.toLowerCase()}.`
+        : `Limited dedicated ${interest.toLowerCase()} spots — mixed in where possible.`,
     };
   });
   const avg = matchReasons.reduce((s, m) => s + m.score, 0) / Math.max(matchReasons.length, 1);
@@ -171,9 +268,21 @@ export function fallbackDecision(t: TripInput, budget: BudgetResult, research: R
     summary: `${t.destination} suits a ${t.days}-day ${t.style.toLowerCase()} trip for ${t.travelers} from ${t.origin}. The plan stays ${within ? "inside" : "above"} your budget and covers ${t.interests.join(", ").toLowerCase()}.`,
     matchReasons,
     optimizations: [
-      { title: "Cluster nearby sights", impact: "Saves ~1 hr/day", detail: "Itinerary groups palace-area sights together to cut local transport." },
-      { title: "Public transport first", impact: `Saves ~₹${Math.round(t.budget * 0.08)}`, detail: "Bus/train beats a private cab for small groups." },
-      { title: "Keep a 8% buffer", impact: "Lower risk", detail: "Unplanned costs are covered without overspending." },
+      {
+        title: "Cluster nearby sights",
+        impact: "Saves ~1 hr/day",
+        detail: "Itinerary groups palace-area sights together to cut local transport.",
+      },
+      {
+        title: "Public transport first",
+        impact: `Saves ~₹${Math.round(t.budget * 0.08)}`,
+        detail: "Bus/train beats a private cab for small groups.",
+      },
+      {
+        title: "Keep a 8% buffer",
+        impact: "Lower risk",
+        detail: "Unplanned costs are covered without overspending.",
+      },
     ],
     alternatives: /mys(o|u)r/i.test(t.destination)
       ? [
@@ -181,6 +290,12 @@ export function fallbackDecision(t: TripInput, budget: BudgetResult, research: R
           { name: "Coorg", reason: "More nature and coffee estates if you extend by a day." },
         ]
       : [{ name: "A nearby hill town", reason: "Swap in if you want more nature." }],
-    packingList: ["Comfortable walking shoes", "Light cotton layers", "Reusable water bottle", "Cash for local vendors", "Phone power bank"],
+    packingList: [
+      "Comfortable walking shoes",
+      "Light cotton layers",
+      "Reusable water bottle",
+      "Cash for local vendors",
+      "Phone power bank",
+    ],
   };
 }

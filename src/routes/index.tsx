@@ -17,12 +17,14 @@ export const Route = createFileRoute("/")({
       { title: "TripSync AI — Plan a trip with four autonomous AI agents" },
       {
         name: "description",
-        content: "Enter where, when and how much. TripSync AI's research, budget, route and decision agents build a full day-wise plan with maps and charts.",
+        content:
+          "Enter where, when and how much. TripSync AI's research, budget, route and decision agents build a full day-wise plan with maps and charts.",
       },
       { property: "og:title", content: "TripSync AI — Plan a trip with four autonomous AI agents" },
       {
         property: "og:description",
-        content: "Research, budget, route and personalisation agents coordinate to plan your trip in under a minute.",
+        content:
+          "Research, budget, route and personalisation agents coordinate to plan your trip in under a minute.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -61,8 +63,8 @@ function Index() {
               <span className="italic text-sun">One perfect trip.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg text-muted-foreground">
-              Tell TripSync where you're headed. A research, budget, route and decision agent work together — powered by Gemini — to hand you a
-              ready-to-go plan.
+              Tell TripSync where you're headed. A research, budget, route and decision agent work
+              together — powered by Gemini — to hand you a ready-to-go plan.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button variant="hero" size="xl" asChild>
@@ -79,7 +81,10 @@ function Index() {
           </div>
 
           {/* Agent constellation */}
-          <div className="relative mx-auto aspect-square w-full max-w-md animate-fade-up" style={{ animationDelay: "150ms" }}>
+          <div
+            className="relative mx-auto aspect-square w-full max-w-md animate-fade-up"
+            style={{ animationDelay: "150ms" }}
+          >
             <svg viewBox="0 0 400 400" className="absolute inset-0 size-full" aria-hidden>
               {[
                 [200, 70],
@@ -87,9 +92,23 @@ function Index() {
                 [200, 330],
                 [70, 200],
               ].map(([x, y], i) => (
-                <line key={i} x1="200" y1="200" x2={x} y2={y} className="animate-dash stroke-primary/40" strokeWidth="2" />
+                <line
+                  key={i}
+                  x1="200"
+                  y1="200"
+                  x2={x}
+                  y2={y}
+                  className="animate-dash stroke-primary/40"
+                  strokeWidth="2"
+                />
               ))}
-              <circle cx="200" cy="200" r="150" className="fill-none stroke-border" strokeDasharray="4 6" />
+              <circle
+                cx="200"
+                cy="200"
+                r="150"
+                className="fill-none stroke-border"
+                strokeDasharray="4 6"
+              />
             </svg>
             <div className="absolute left-1/2 top-1/2 grid size-28 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-ink text-center text-ink-foreground shadow-lift">
               <div>
@@ -100,14 +119,23 @@ function Index() {
             {AGENTS.map((a, i) => {
               const st = AGENT_STYLE[a.id];
               const Icon = st.icon;
-              const pos = ["left-1/2 top-[17.5%]", "left-[82.5%] top-1/2", "left-1/2 top-[82.5%]", "left-[17.5%] top-1/2"][i];
+              const pos = [
+                "left-1/2 top-[17.5%]",
+                "left-[82.5%] top-1/2",
+                "left-1/2 top-[82.5%]",
+                "left-[17.5%] top-1/2",
+              ][i];
               return (
                 <div key={a.id} className={`absolute ${pos} -translate-x-1/2 -translate-y-1/2`}>
                   <div className="flex w-28 flex-col items-center gap-1.5 text-center">
-                    <span className={`grid size-14 place-items-center rounded-2xl border bg-card shadow-card ${st.border} ${st.text}`}>
+                    <span
+                      className={`grid size-14 place-items-center rounded-2xl border bg-card shadow-card ${st.border} ${st.text}`}
+                    >
                       <Icon className="size-6" />
                     </span>
-                    <span className="rounded-full bg-card px-2 py-0.5 text-xs font-semibold shadow-card">{a.short}</span>
+                    <span className="rounded-full bg-card px-2 py-0.5 text-xs font-semibold shadow-card">
+                      {a.short}
+                    </span>
                   </div>
                 </div>
               );
@@ -119,7 +147,9 @@ function Index() {
       {/* How it works */}
       <section id="how" className="mx-auto max-w-7xl scroll-mt-20 px-4 py-14 sm:px-6">
         <p className="text-xs font-semibold uppercase tracking-widest text-accent">How it works</p>
-        <h2 className="mt-2 max-w-2xl text-3xl font-semibold sm:text-4xl">An orchestrator hands your trip down a relay of specialists.</h2>
+        <h2 className="mt-2 max-w-2xl text-3xl font-semibold sm:text-4xl">
+          An orchestrator hands your trip down a relay of specialists.
+        </h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {AGENTS.map((a, i) => {
             const st = AGENT_STYLE[a.id];
@@ -127,7 +157,9 @@ function Index() {
             return (
               <div key={a.id} className="journal-card p-5">
                 <div className="flex items-center justify-between">
-                  <span className={`grid size-10 place-items-center rounded-xl ${st.bg} ${st.text}`}>
+                  <span
+                    className={`grid size-10 place-items-center rounded-xl ${st.bg} ${st.text}`}
+                  >
                     <Icon className="size-5" />
                   </span>
                   <span className="font-display text-3xl italic text-border">0{i + 1}</span>

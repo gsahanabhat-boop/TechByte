@@ -5,7 +5,11 @@ export function mapsSearchUrl(place: string, city?: string): string {
   return `${BASE}/search/?api=1&query=${encodeURIComponent(q)}`;
 }
 
-export function mapsDirectionsUrl(origin: string, destination: string, waypoints: string[] = []): string {
+export function mapsDirectionsUrl(
+  origin: string,
+  destination: string,
+  waypoints: string[] = [],
+): string {
   const params = new URLSearchParams({ api: "1", origin, destination, travelmode: "driving" });
   const wp = waypoints.filter(Boolean).slice(0, 8);
   if (wp.length) params.set("waypoints", wp.join("|"));
@@ -13,7 +17,9 @@ export function mapsDirectionsUrl(origin: string, destination: string, waypoints
 }
 
 export function formatINR(n: number): string {
-  return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(
-    Math.round(n || 0),
-  );
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(Math.round(n || 0));
 }

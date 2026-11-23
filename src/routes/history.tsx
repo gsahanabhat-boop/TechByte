@@ -12,7 +12,10 @@ export const Route = createFileRoute("/history")({
   head: () => ({
     meta: [
       { title: "My trips — TripSync AI" },
-      { name: "description", content: "Every trip plan you've saved from TripSync AI's travel agents." },
+      {
+        name: "description",
+        content: "Every trip plan you've saved from TripSync AI's travel agents.",
+      },
       { property: "og:title", content: "My trips — TripSync AI" },
       { property: "og:description", content: "Your saved AI-generated travel plans." },
       { property: "og:type", content: "website" },
@@ -49,7 +52,9 @@ function HistoryPage() {
         {trips.length === 0 ? (
           <div className="journal-card mt-8 p-10 text-center">
             <p className="font-display text-2xl">No trips yet</p>
-            <p className="mt-2 text-sm text-muted-foreground">Plan one and hit "Save trip" to keep it here.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Plan one and hit "Save trip" to keep it here.
+            </p>
             <Button variant="hero" className="mt-6" asChild>
               <Link to="/">Plan a trip</Link>
             </Button>
@@ -60,7 +65,12 @@ function HistoryPage() {
               <li key={t.id} className="journal-card flex flex-col p-5">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className="text-xs text-muted-foreground">{new Date(t.createdAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(t.createdAt).toLocaleString("en-IN", {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      })}
+                    </p>
                     <h2 className="mt-1 text-2xl font-semibold">
                       {t.input.origin} → <span className="text-accent">{t.input.destination}</span>
                     </h2>
@@ -77,7 +87,8 @@ function HistoryPage() {
                     <Users className="size-4" /> {t.input.travelers}
                   </span>
                   <span className="flex items-center gap-1">
-                    <Wallet className="size-4" /> {formatINR(t.budget.estimatedTotal)} / {formatINR(t.input.budget)}
+                    <Wallet className="size-4" /> {formatINR(t.budget.estimatedTotal)} /{" "}
+                    {formatINR(t.input.budget)}
                   </span>
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -86,7 +97,12 @@ function HistoryPage() {
                       Open plan <ArrowRight />
                     </Link>
                   </Button>
-                  <Button variant="outline" size="icon" aria-label="Delete trip" onClick={() => tripHistory.remove(t.id)}>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    aria-label="Delete trip"
+                    onClick={() => tripHistory.remove(t.id)}
+                  >
                     <Trash2 />
                   </Button>
                 </div>

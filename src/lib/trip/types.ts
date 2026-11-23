@@ -62,7 +62,13 @@ export const researchSchema = z.object({
 });
 export type ResearchResult = z.infer<typeof researchSchema>;
 
-export const BUDGET_CATEGORIES = ["Transport", "Accommodation", "Food", "Activities", "Misc"] as const;
+export const BUDGET_CATEGORIES = [
+  "Transport",
+  "Accommodation",
+  "Food",
+  "Activities",
+  "Misc",
+] as const;
 
 export const budgetSchema = z.object({
   totalBudget: num,

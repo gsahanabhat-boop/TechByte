@@ -6,7 +6,14 @@ import { DEMO_INPUT, tripInputSchema } from "@/lib/trip/types";
 
 describe("TripSync rules", () => {
   it("demo input is Bengaluru → Mysuru, 2 days, ₹5,000, 2 travellers, budget style", () => {
-    expect(DEMO_INPUT).toMatchObject({ origin: "Bengaluru", destination: "Mysuru", days: 2, budget: 5000, travelers: 2, style: "Budget" });
+    expect(DEMO_INPUT).toMatchObject({
+      origin: "Bengaluru",
+      destination: "Mysuru",
+      days: 2,
+      budget: 5000,
+      travelers: 2,
+      style: "Budget",
+    });
     expect(DEMO_INPUT.interests).toEqual(["Nature", "Culture", "Food"]);
   });
 
@@ -30,6 +37,8 @@ describe("TripSync rules", () => {
     expect(mapsSearchUrl("Mysore Palace", "Mysuru")).toBe(
       "https://www.google.com/maps/search/?api=1&query=Mysore%20Palace%2C%20Mysuru",
     );
-    expect(mapsDirectionsUrl("Bengaluru", "Mysuru")).toContain("origin=Bengaluru&destination=Mysuru");
+    expect(mapsDirectionsUrl("Bengaluru", "Mysuru")).toContain(
+      "origin=Bengaluru&destination=Mysuru",
+    );
   });
 });
