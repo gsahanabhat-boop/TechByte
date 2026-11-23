@@ -251,3 +251,13 @@
     stroke-dashoffset: -28;
   }
 }
+
+/* Google sign-in button: Google's light theme (branding guidelines). */
+@utility google-signin {
+  background-color: #ffffff !important;
+  color: #1f1f1f !important;
+  border: 1px solid #747775 !important;
+  &:hover {
+    background-color: #f8f9fa !important;
+  }
+}

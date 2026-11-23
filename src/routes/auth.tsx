@@ -77,11 +77,22 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
+  const [unconfirmed, setUnconfirmed] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const target = safeRedirect(
     search.redirect ??
       (typeof window !== "undefined" ? sessionStorage.getItem(REDIRECT_KEY) : null),
   );
+
+  // Errors returned by a provider or an expired confirmation link arrive in the URL.
+  useEffect(() => {
+    const params = new URLSearchParams(
+      window.location.hash.slice(1) || window.location.search.slice(1),
+    );
+    const desc = params.get("error_description");
+    if (desc) setError(desc.replace(/\+/g, " "));
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -93,6 +104,7 @@ function AuthPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setUnconfirmed(false);
     const parsed = credsSchema.safeParse({ email, password });
     if (!parsed.success) {
       setError(parsed.error.issues[0]?.message ?? "Check your details");
@@ -101,18 +113,41 @@ function AuthPage() {
     setBusy(true);
     if (mode === "signin") {
       const { error } = await supabase.auth.signInWithPassword(parsed.data);
-      if (error) setError(error.message);
+      if (error) {
+        if (error.code === "email_not_confirmed") {
+          setUnconfirmed(true);
+          setError("Please confirm your email first — check your inbox for the link.");
+        } else if (error.code === "invalid_credentials") {
+          setError("That email and password don't match. Try again or create an account.");
+        } else setError(error.message);
+      }
     } else {
       const { data, error } = await supabase.auth.signUp({
         ...parsed.data,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth?redirect=${encodeURIComponent(target)}`,
-        },
+        options: { emailRedirectTo: confirmRedirect() },
       });
       if (error) setError(error.message);
+      else if (data.user && data.user.identities?.length === 0)
+        setError("An account with this email already exists. Sign in instead.");
       else if (!data.session) setSent(true);
     }
     setBusy(false);
+  }
+
+  function confirmRedirect() {
+    return `${window.location.origin}/auth?redirect=${encodeURIComponent(target)}`;
+  }
+
+  async function resend() {
+    setResending(true);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: email.trim(),
+      options: { emailRedirectTo: confirmRedirect() },
+    });
+    setResending(false);
+    if (error) toast.error("Couldn't resend the email", { description: error.message });
+    else toast.success("Confirmation email sent", { description: `Check ${email.trim()}` });
   }
 
   async function social(provider: "google" | "lovable") {
@@ -140,9 +175,21 @@ function AuthPage() {
           </p>
 
           {sent ? (
-            <div className="mt-6 rounded-xl bg-secondary p-4 text-center text-sm">
-              Check <span className="font-semibold">{email}</span> for a confirmation link, then
-              come back to sign in.
+            <div className="mt-6 space-y-3 rounded-xl bg-secondary p-4 text-center text-sm">
+              <p>
+                We sent a confirmation link to <span className="font-semibold">{email}</span>.
+                Open it to finish creating your account — you'll be signed in automatically.
+              </p>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                disabled={resending}
+                onClick={() => void resend()}
+              >
+                {resending && <Loader2 className="animate-spin" />}
+                Resend email
+              </Button>
             </div>
           ) : (
             <>
@@ -150,7 +197,7 @@ function AuthPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-11 w-full"
+                  className="google-signin h-11 w-full font-medium"
                   onClick={() => void social("google")}
                 >
                   <GoogleLogo /> Continue with Google
@@ -192,6 +239,17 @@ function AuthPage() {
                   />
                 </div>
                 {error && <p className="text-sm text-destructive">{error}</p>}
+                {unconfirmed && (
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="h-auto p-0"
+                    disabled={resending}
+                    onClick={() => void resend()}
+                  >
+                    Resend confirmation email
+                  </Button>
+                )}
                 <Button type="submit" className="h-11 w-full" disabled={busy}>
                   {busy && <Loader2 className="animate-spin" />}
                   {mode === "signin" ? "Sign in" : "Create account"}
@@ -207,6 +265,7 @@ function AuthPage() {
                 setMode(mode === "signin" ? "signup" : "signin");
                 setSent(false);
                 setError(null);
+                setUnconfirmed(false);
               }}
               className={cn("font-semibold text-primary hover:underline")}
             >
