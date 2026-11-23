@@ -34,5 +34,7 @@ use the editor.
 - Trip agents run server-side in `src/lib/trip/agents.server.ts` via the Lovable AI gateway; the client-side orchestrator (`src/lib/trip/orchestrator.ts`) calls one `runAgent` server function per agent so the UI can show live progress.
 - Every agent must degrade to `src/lib/trip/fallback.ts` on any AI failure so a plan is always produced.
 - Agent outputs are parsed with the zod schemas in `src/lib/trip/types.ts` (lenient `.catch` defaults) — change the schema and prompt shape together.
-- Saved trips live in browser localStorage (`src/lib/trip/history.ts`); there is no account system.
+- Saved trips live in browser localStorage (`src/lib/trip/history.ts`); accounts exist only for the chatbot.
+- The Yatri chatbot keeps one conversation per signed-in user in `chat_messages`; `/api/chat` verifies the bearer token, saves both turns, and streams via the AI gateway. UI lives in `src/components/chat/ChatPanel.tsx`, shared by `/chat` and the floating `ChatWidget` mounted in `__root`.
+- Auth state comes from the single `AuthProvider` listener in `src/lib/auth.tsx`; protected pages go under `src/routes/_authenticated/`.
 - `backend/` is an optional standalone FastAPI mirror of the agents for local Python use; the web app does not depend on it.
